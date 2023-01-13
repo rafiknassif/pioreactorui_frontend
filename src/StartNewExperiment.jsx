@@ -41,7 +41,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     width: "100%"
-
+  },
+  datetimeField: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    width: "100%",
+    fontSize: "12px"
   },
   formControl: {
     margin: theme.spacing(3),
@@ -131,7 +136,7 @@ function FreeSoloCreateOption(props) {
 
 function ExperimentSummaryForm(props) {
   const classes = useStyles();
-  const timestamp = moment.utc()
+  const [timestamp, setTimestamp] = React.useState(moment.utc());
   const [formError, setFormError] = React.useState(false);
   const [helperText, setHelperText] = React.useState("");
   const [expName, setExpName] = React.useState("");
@@ -224,12 +229,17 @@ function ExperimentSummaryForm(props) {
   const onDescChange = (e) => {
     setDescription(e.target.value)
   }
+  const onTimestampChange = (e) => {
+    if (moment(e.target.value, "YYYY-MM-DDTHH:mm", true).isValid()){
+      setTimestamp(moment(e.target.value, "YYYY-MM-DDTHH:mm", true))
+    }
+  }
 
   return (
     <div className={classes.root}>
       <FormGroup>
         <Grid container spacing={1}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={7}>
             <TextField
               error={formError}
               id="expName"
@@ -241,7 +251,19 @@ function ExperimentSummaryForm(props) {
               helperText={helperText}
               />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
+            <TextField
+              id="datetime"
+              label="Start time"
+              type="datetime-local"
+              value={timestamp.local().format("YYYY-MM-DDTHH:mm")}
+              className={classes.datetimeField}
+              onChange={onTimestampChange}
+              InputLabelProps={{
+                shrink: true,
+
+              }}
+            />
           </Grid>
           <Grid item xs={12} md={12}>
             <TextField
