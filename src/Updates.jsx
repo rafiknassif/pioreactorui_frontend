@@ -394,20 +394,14 @@ function ChangelogContainer(){
 
   React.useEffect(() => {
     async function getData() {
-         await fetch("https://raw.githubusercontent.com/Pioreactor/pioreactor/master/CHANGELOG.md")
+         await fetch("/api/changelog")
         .then((response) => {
-          return response.text();
-        })
-        .then((data) => {
-          setChangelog(data)
-        }
-        ).catch(e => {
-          // no internet?
-          setChangelog(`
-Could not retrieve latest Changelog. Perhaps not connected to the internet.
- - You can find the latest changelog at this url: [https://github.com/pioreactor/pioreactor/master/CHANGELOG.md](https://github.com/pioreactor/pioreactor/master/CHANGELOG.md)
- - To update to the latest version of Pioreactor software, even without internet, see documentation here: [https://docs.pioreactor.com/user-guide/common-questions#im-using-a-local-access-point-but-id-like-to-install-plugins-update-software-etc](https://docs.pioreactor.com/user-guide/common-questions#im-using-a-local-access-point-but-id-like-to-install-plugins-update-software-etc).
-          `)
+          if (!response.ok) {
+            setChangelog('Unable to get changelog from server.')
+          }
+          else{
+            setChangelog(response.text());
+          }
         })
       }
       getData()
