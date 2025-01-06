@@ -149,7 +149,7 @@ function UnitSettingDisplay(props) {
       return "0"
     }
     else if (x < 1){
-      return `<1`
+      return x.toPrecision(4);
     } else {
       return (x).toFixed(1).replace(/[.,]0$/, "");
     }
